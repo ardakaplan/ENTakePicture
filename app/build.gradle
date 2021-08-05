@@ -1,27 +1,41 @@
-plugins {
-    id 'com.android.application'
-}
+apply plugin: 'com.android.application'
+apply from: '../script_apk_file_path.gradle'
 
 android {
     compileSdk 30
 
     defaultConfig {
+
         applicationId "com.enerjisa.entakepicture"
+
         minSdk 23
         targetSdk 30
-        versionCode 1
-        versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionCode 1
+        versionName "0.0.0.1"
+
+        setProperty("archivesBaseName", getApkName("EN_FRAMEWORK", versionName))
+
+        buildConfigField "String", 'GIT_BRANCH_NAME', '\"' + branchName + '\"'
+    }
+
+
+    lintOptions {
+
+        disable 'NonConstantResourceId'
     }
 
     buildTypes {
+
         release {
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -29,9 +43,45 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    //******************************************************
+    //******************EN**********************************
+    //******************************************************
+
+    //FRAMEWORK
+    implementation 'com.github.ardakaplan:ENFramework:47371760a8'
+
+    //******************************************************
+    //******************GOOGLE******************************
+    //******************************************************
+
+    //DAGGER
+    implementation "com.google.dagger:dagger:2.28.3"
+    implementation("com.google.dagger:dagger-android-support:2.17") {
+        exclude group: 'com.android.support', module: 'support-fragment'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
+    annotationProcessor "com.google.dagger:dagger-android-processor:2.16"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.16"
+
+    //MATERIALS
     implementation 'com.google.android.material:material:1.4.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //******************************************************
+    //******************RDA*********************************
+    //******************************************************
+
+    //RDA-LOGGER
+    implementation "com.github.ardakaplan:RDALogger:2.0.2"
+
+    //******************************************************
+    //******************OTHER*******************************
+    //******************************************************
+
+    //GSON
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+
+    //BUTTER KNIFE
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
 }

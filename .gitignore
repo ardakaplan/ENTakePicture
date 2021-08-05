@@ -27,7 +27,6 @@ proguard/
 # Android Studio Navigation editor temp files
 .navigation/
 
-/gradle.properties
 /local.properties
 .idea/
 .DS_Store

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".ui.screens.MainActivity"
+    tools:ignore="HardcodedText">
+
+    <Button
+        android:id="@+id/mainActicity_button_fileTest"
+        style="@style/general_button"
+        android:text="FILE TEST" />
+
+    <Button
+        android:id="@+id/mainActicity_button_sharedTest"
+        style="@style/general_button"
+        android:text="SHARED TEST" />
+
+    <Button
+        android:id="@+id/mainActicity_button_recyclerTest"
+        style="@style/general_button"
+        android:text="RECYCLER VIEW" />
+
+    <Button
+        android:id="@+id/mainActicity_button_dialogs"
+        style="@style/general_button"
+        android:text="DIALOGS" />
+
+    <Button
+        android:id="@+id/mainActicity_button_spinner"
+        style="@style/general_button"
+        android:text="SPINNER" />
+
+    <Button
+        android:id="@+id/mainActicity_button_viewPager"
+        style="@style/general_button"
+        android:text="VIEW PAGER" />
+
+</LinearLayout>
