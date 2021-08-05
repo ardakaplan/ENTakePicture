@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
 
-        applicationId "com.enerjisa.entakepicture"
+        applicationId "com.enerjisa.entakepicturetest"
 
         minSdk 23
         targetSdk 30
@@ -42,6 +42,9 @@ android {
 }
 
 dependencies {
+
+    //OWN LIBRARY
+    implementation project(':module_entakepicture')
 
     //******************************************************
     //******************EN**********************************
