@@ -1,0 +1,46 @@
+task copyDebugApk(type: Copy) {
+
+    Properties properties = new Properties()//
+
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    if (properties.containsKey('custom_path_for_apks')) {
+
+        from 'build/outputs/apk/debug'
+
+        into properties.getProperty('custom_path_for_apks')
+
+        include '*.apk'
+
+        delete fileTree('build/outputs/apk/debug') {
+            include '*.apk'
+        }
+    }
+}
+
+task copyReleaseApk(type: Copy) {
+
+    Properties properties = new Properties()//
+
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    if (properties.containsKey('custom_path_for_apks')) {
+
+        from 'build/outputs/apk/release'
+
+        into properties.getProperty('custom_path_for_apks')
+
+        include '*.apk'
+
+        delete fileTree('build/outputs/apk/release') {
+            include '*.apk'
+        }
+    }
+}
+
+afterEvaluate {
+
+    packageRelease.finalizedBy(copyReleaseApk)
+
+//    packageDebug.finalizedBy(copyDebugApk)
+}

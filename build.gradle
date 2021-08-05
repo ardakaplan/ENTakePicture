@@ -1,0 +1,27 @@
+apply from: 'script_git_branch_name_finder.gradle'
+
+buildscript {
+
+    ext.getApkName = { applicationName, applicationVersion ->
+
+        return "$branchName" + "-" + applicationVersion + "-" + applicationName
+    }
+
+    repositories {
+
+        google()
+
+        mavenCentral()
+
+    }
+
+    dependencies {
+
+        classpath "com.android.tools.build:gradle:7.0.0"
+    }
+}
+
+task clean(type: Delete) {
+
+    delete rootProject.buildDir
+}

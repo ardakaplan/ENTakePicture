@@ -1,0 +1,22 @@
+def getGitRevParseInfo(what, localGitPath) {
+
+    def command = localGitPath + " rev-parse " + what + " HEAD"
+
+    command.execute().text.trim()
+}
+
+ext {
+
+    Properties properties = new Properties()
+
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    branchName = "LOCAL_GIT_PATH_BULUNAMADI"
+
+    if (properties.containsKey('local_git_path')) {
+
+        branchName = getGitRevParseInfo("--abbrev-ref", properties.getProperty('local_git_path'))
+    }
+
+    println "BRANCH NAME " + branchName
+}
