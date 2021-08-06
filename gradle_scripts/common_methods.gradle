@@ -1,5 +1,14 @@
+/**
+ * tüm gradle dosyalarından kullanılabilir metod ve değişkenlerin tanımlanacağı sınıf
+ *
+ * ortak metod lar buraya tanımlanmalı
+ */
+
 ext {
 
+    /**
+     *  local.properties dosyasını dönen metod
+     */
     getLocalPropertiesFile = {
 
         Properties localProperties = new Properties()
@@ -8,6 +17,58 @@ ext {
 
         return localProperties
     }
+
+
+    /**
+     * console renkli olarak yazı yazmayı sağlayan methodlar, değişkenler
+     */
+    ///////////////////PRINTING TO CONSOLE++++++++++++++
+
+    ANSI_RESET = "\u001B[0m";
+    ANSI_BLACK = "\u001B[30m";
+    ANSI_RED = "\u001B[31m";
+    ANSI_GREEN = "\u001B[32m";
+    ANSI_YELLOW = "\u001B[33m";
+    ANSI_BLUE = "\u001B[34m";
+    ANSI_PURPLE = "\u001B[35m";
+    ANSI_CYAN = "\u001B[36m";
+    ANSI_WHITE = "\u001B[37m";
+
+    printRed = {
+
+        println(ANSI_RED + it + ANSI_RESET)
+    }
+
+    printBlue = {
+
+        println(ANSI_BLUE + it + ANSI_RESET)
+    }
+
+    printGreen = {
+
+        println(ANSI_GREEN + it + ANSI_RESET)
+    }
+
+    printYellow = {
+
+        println(ANSI_YELLOW + it + ANSI_RESET)
+    }
+
+    printPurple = {
+
+        println(ANSI_PURPLE + it + ANSI_RESET)
+    }
+
+    printCyan = {
+
+        println(ANSI_CYAN + it + ANSI_RESET)
+    }
+
+    printWhite = {
+
+        println(ANSI_WHITE + it + ANSI_RESET)
+    }
+    ///////////////////PRINTING TO CONSOLE--------------
 }
 
 

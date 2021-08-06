@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: '../gradle_scripts/script_apk_file_path.gradle'
+apply from: '../gradle_scripts/apk_file_path.gradle'
 
 
 android {

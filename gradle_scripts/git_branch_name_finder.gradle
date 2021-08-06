@@ -1,4 +1,4 @@
-apply from: 'gradle_scripts/script_build_log_with_color.gradle'
+apply from: 'gradle_scripts/common_methods.gradle'
 
 static def getGitRevParseInfo(what, localGitPath) {
 
