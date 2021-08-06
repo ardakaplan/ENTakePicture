@@ -20,6 +20,8 @@ android {
         buildConfigField "String", 'GIT_BRANCH_NAME', '\"' + branchName + '\"'
     }
 
+
+
     lintOptions {
 
         disable 'NonConstantResourceId'

@@ -4,17 +4,11 @@ apply from: 'gradle_scripts/library_versions.gradle'
 
 buildscript {
 
-    ext.getApkName = { applicationName, applicationVersion ->
-
-        return "$branchName" + "-" + applicationVersion + "-" + applicationName
-    }
-
     repositories {
 
         google()
 
         mavenCentral()
-
     }
 
     dependencies {

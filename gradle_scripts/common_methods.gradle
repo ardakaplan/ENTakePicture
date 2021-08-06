@@ -7,6 +7,14 @@
 ext {
 
     /**
+     * verilen parametreler göre uygulama ismini döner
+     */
+    getApkName = { applicationName, applicationVersion ->
+
+        return "$branchName" + "-" + applicationVersion + "-" + applicationName
+    }
+
+    /**
      *  local.properties dosyasını dönen metod
      */
     getLocalPropertiesFile = {
