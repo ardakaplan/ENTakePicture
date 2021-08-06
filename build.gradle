@@ -1,6 +1,6 @@
-apply from: 'script_git_branch_name_finder.gradle'
-apply from: 'script_aar_usage.gradle'
-apply from: 'script_library_versions.gradle'
+apply from: 'gradle_scripts/script_git_branch_name_finder.gradle'
+apply from: 'gradle_scripts/script_aar_usage.gradle'
+apply from: 'gradle_scripts/script_library_versions.gradle'
 apply from: 'gradle_scripts/script_build_log_with_color.gradle'
 
 
