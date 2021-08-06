@@ -9,15 +9,13 @@ static def getGitRevParseInfo(what, localGitPath) {
 
 ext {
 
-    Properties properties = new Properties()
-
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    Properties localProperties = getLocalPropertiesFile()
 
     branchName = "LOCAL_GIT_PATH_BULUNAMADI"
 
-    if (properties.containsKey('local_git_path')) {
+    if (localProperties.containsKey('local_git_path')) {
 
-        branchName = getGitRevParseInfo("--abbrev-ref", properties.getProperty('local_git_path'))
+        branchName = getGitRevParseInfo("--abbrev-ref", localProperties.getProperty('local_git_path'))
     }
 
     println(ext.ANSI_WHITE + "BRANCH NAME : " + ext.ANSI_BLUE + branchName + ANSI_RESET)

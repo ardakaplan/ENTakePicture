@@ -17,7 +17,6 @@ ext {
     println("#####      AAR USAGES      #####################################")
     println("################################################################")
 
-
     //default value
     aarDir = ""
 
@@ -60,7 +59,6 @@ ext {
 
     //EN_FRAMWORK
     using_en_framework_local_aar = use_en_framework_from_local && en_framework_existance
-
 
     println("\n#FINAL RESULT FOR USING LOCAL AARS")
 

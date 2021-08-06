@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply from: '../gradle_scripts/apk_file_path.gradle'
 
-
 android {
+
     compileSdk 30
 
     defaultConfig {
@@ -19,7 +19,6 @@ android {
 
         buildConfigField "String", 'GIT_BRANCH_NAME', '\"' + branchName + '\"'
     }
-
 
     lintOptions {
 
