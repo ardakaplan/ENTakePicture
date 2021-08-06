@@ -1,16 +1,16 @@
 apply from: 'gradle_scripts/script_build_log_with_color.gradle'
+apply from: 'gradle_scripts/common_methods.gradle'
 
 ext {
 
-    Properties properties = new Properties()
+    Properties localProperties = getLocalPropertiesFile()
 
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    //default values must be -> false
+    use_en_framework_from_local = false
 
-    use_en_framework_from_local = false;
+    if (localProperties.containsKey('use_en_framework_from_local')) {
 
-    if (properties.containsKey('use_en_framework_from_local')) {
-
-        use_en_framework_from_local = properties.getProperty('use_en_framework_from_local')
+        use_en_framework_from_local = localProperties.getProperty('use_en_framework_from_local')
     }
 
     println("")
@@ -19,14 +19,12 @@ ext {
     println("################################################################")
 
 
-
-
     //default value
     aarDir = ""
 
-    if (properties.containsKey('aar_dir')) {
+    if (localProperties.containsKey('aar_dir')) {
 
-        aarDir = properties.getProperty('aar_dir')
+        aarDir = localProperties.getProperty('aar_dir')
 
         println(ext.ANSI_WHITE + "aar_dir field in local.properties : " + ext.ANSI_BLUE + aarDir + ANSI_RESET)
 

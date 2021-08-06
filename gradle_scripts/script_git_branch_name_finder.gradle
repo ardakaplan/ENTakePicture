@@ -1,6 +1,6 @@
 apply from: 'gradle_scripts/script_build_log_with_color.gradle'
 
-def getGitRevParseInfo(what, localGitPath) {
+static def getGitRevParseInfo(what, localGitPath) {
 
     def command = localGitPath + " rev-parse " + what + " HEAD"
 

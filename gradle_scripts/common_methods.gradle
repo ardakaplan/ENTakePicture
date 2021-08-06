@@ -1,0 +1,14 @@
+ext {
+
+    getLocalPropertiesFile = {
+
+        Properties localProperties = new Properties()
+
+        localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+        return localProperties
+    }
+}
+
+
+
