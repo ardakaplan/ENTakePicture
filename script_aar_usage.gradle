@@ -1,4 +1,4 @@
-apply from: 'script_build_log_with_color.gradle'
+apply from: 'gradle_scripts/script_build_log_with_color.gradle'
 
 ext {
 
