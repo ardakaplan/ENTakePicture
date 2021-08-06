@@ -31,5 +31,21 @@ android {
 
 dependencies {
 
+    //******************************************************
+    //******************EN**********************************
+    //******************************************************
 
+    //FRAMEWORK
+    if (using_en_framework_local_aar) {
+
+        println(ANSI_WHITE + "EN_FRAMEWORK usage : " + ANSI_GREEN + "LOCAL" + ANSI_RESET)
+
+        compileOnly files(aarDir + '/' + EN_FRAMEWORK_AAR_NAME)
+
+    } else {
+
+        println(ANSI_WHITE + "EN_FRAMEWORK usage : " + ANSI_GREEN + "CLOUD - version : $en_framework_version" + ANSI_RESET)
+
+        compileOnly "com.github.ardakaplan:ENFramework:$en_framework_version"
+    }
 }

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply from: '../script_apk_file_path.gradle'
 
+
 android {
     compileSdk 30
 
@@ -50,8 +51,19 @@ dependencies {
     //******************EN**********************************
     //******************************************************
 
-    //FRAMEWORK
-    implementation 'com.github.ardakaplan:ENFramework:47371760a8'
+    //EN FRAMEWORK
+    if (using_en_framework_local_aar) {
+
+        println(ANSI_WHITE + "EN_FRAMEWORK usage : " + ANSI_GREEN + "LOCAL" + ANSI_RESET)
+
+        implementation files(aarDir + '/' + EN_FRAMEWORK_AAR_NAME)
+
+    } else {
+
+        println(ANSI_WHITE + "EN_FRAMEWORK usage : " + ANSI_GREEN + "CLOUD - version : $en_framework_version" + ANSI_RESET)
+
+        implementation "com.github.ardakaplan:ENFramework:$en_framework_version"
+    }
 
     //******************************************************
     //******************GOOGLE******************************

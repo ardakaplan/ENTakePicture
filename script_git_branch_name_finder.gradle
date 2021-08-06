@@ -1,3 +1,5 @@
+apply from: 'script_build_log_with_color.gradle'
+
 def getGitRevParseInfo(what, localGitPath) {
 
     def command = localGitPath + " rev-parse " + what + " HEAD"
@@ -18,5 +20,5 @@ ext {
         branchName = getGitRevParseInfo("--abbrev-ref", properties.getProperty('local_git_path'))
     }
 
-    println "BRANCH NAME " + branchName
+    println(ext.ANSI_WHITE + "BRANCH NAME : " + ext.ANSI_BLUE + branchName + ANSI_RESET)
 }

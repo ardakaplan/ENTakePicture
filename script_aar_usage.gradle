@@ -1,0 +1,71 @@
+apply from: 'script_build_log_with_color.gradle'
+
+ext {
+
+    Properties properties = new Properties()
+
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    use_en_framework_from_local = false;
+
+    if (properties.containsKey('use_en_framework_from_local')) {
+
+        use_en_framework_from_local = properties.getProperty('use_en_framework_from_local')
+    }
+
+    println("")
+    println("################################################################")
+    println("#####      AAR USAGES      #####################################")
+    println("################################################################")
+
+
+
+
+    //default value
+    aarDir = ""
+
+    if (properties.containsKey('aar_dir')) {
+
+        aarDir = properties.getProperty('aar_dir')
+
+        println(ext.ANSI_WHITE + "aar_dir field in local.properties : " + ext.ANSI_BLUE + aarDir + ANSI_RESET)
+
+    } else {
+
+        ext.printRed("aar_dir field in local.properties IS NOT DEFINED")
+    }
+
+    println("\n#USER ADJUSTMENTS FOR LOCAL AARS")
+
+    println(ext.ANSI_BLUE + "use_en_framework_from_local : " + ext.ANSI_CYAN + use_en_framework_from_local + ANSI_RESET)
+
+    //****************************************************************************/
+    //****LOCAL AARS NAME*********************************************************/
+    //****************************************************************************/
+
+    //EN_FRAMEWORK AAR NAME
+    EN_FRAMEWORK_AAR_NAME = "/EN_FRAMEWORK-debug.aar"
+
+    //****************************************************************************/
+    //****AAR EXISTANCE***********************************************************/
+    //****************************************************************************/
+
+    //EN_FRAMWORK EXISTANCE
+    println("\n#LOCAL AARS EXISTANCES")
+
+    en_framework_existance = file(aarDir + EN_FRAMEWORK_AAR_NAME).exists()
+
+    println(ext.ANSI_YELLOW + "en_framework_existance : " + ext.ANSI_CYAN + en_framework_existance + ANSI_RESET)
+
+    //****************************************************************************/
+    //****FINAL RESULT OF LOCAL USAGE*********************************************/
+    //****************************************************************************/
+
+    //EN_FRAMWORK
+    using_en_framework_local_aar = use_en_framework_from_local && en_framework_existance
+
+
+    println("\n#FINAL RESULT FOR USING LOCAL AARS")
+
+    println(ext.ANSI_GREEN + "using_en_framework_local_aar : " + ext.ANSI_CYAN + using_en_framework_local_aar + ANSI_RESET)
+}

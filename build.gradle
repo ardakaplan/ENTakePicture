@@ -1,6 +1,13 @@
 apply from: 'script_git_branch_name_finder.gradle'
+apply from: 'script_aar_usage.gradle'
+apply from: 'script_library_versions.gradle'
+apply from: 'script_build_log_with_color.gradle'
+
+
 
 buildscript {
+
+    ext.rda_logger_kotlin_version = '1.5.10'
 
     ext.getApkName = { applicationName, applicationVersion ->
 
