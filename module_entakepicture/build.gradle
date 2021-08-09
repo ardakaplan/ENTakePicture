@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from: '../gradle_scripts/aar_deployment.gradle'
 
 android {
 
@@ -48,4 +49,39 @@ dependencies {
 
         compileOnly "com.github.ardakaplan:ENFramework:$en_framework_version"
     }
+
+    //******************************************************
+    //******************GOOGLE******************************
+    //******************************************************
+
+    //DAGGER
+    compileOnly "com.google.dagger:dagger:$dagger_version"
+    compileOnly("com.google.dagger:dagger-android-support:$dagger_android_support_version") {
+        exclude group: 'com.android.support', module: 'support-fragment'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_annotation_processor_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_annotation_processor_version"
+
+    //******************************************************
+    //******************ANDROID X***************************
+    //******************************************************
+
+    //APPCOMBAT
+    compileOnly "androidx.appcompat:appcompat:$appcompat_version"
+
+    implementation 'androidx.exifinterface:exifinterface:1.3.3'
+
+    //******************************************************
+    //******************RDA*********************************
+    //******************************************************
+
+    //RDA-LOGGER
+    compileOnly "com.github.ardakaplan:RDALogger:$rdalogger_version"
+
+    //RDA TOAST
+    compileOnly "com.github.ardakaplan:RDAToast:$rdatoast_version"
+
+
 }

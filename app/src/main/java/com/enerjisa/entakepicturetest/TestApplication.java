@@ -23,12 +23,12 @@ public class TestApplication extends ENApplication {
 
     @Override
     protected String getRDALoggerTag() {
-        return null;
+        return getString(R.string.app_name);
     }
 
     @Override
     protected boolean doesRDALoggerWork() {
-        return false;
+        return true;
     }
 
     @Override

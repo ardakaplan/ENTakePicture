@@ -1,0 +1,26 @@
+task copyReleaseApk(type: Copy) {
+
+    Properties localProperties = new Properties()
+
+    localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    if (localProperties.containsKey('aar_dir')) {
+
+        println "aar_dir is filled -> " + localProperties.getProperty('aar_dir')
+
+        from 'build/outputs/aar', 'build/libs'
+
+        into localProperties.getProperty('aar_dir')
+
+        include '*debug.aar', '*sources.jar'
+
+    } else {
+
+        println "aar_dir is not set"
+    }
+}
+
+afterEvaluate {
+
+    assembleDebug.finalizedBy(copyReleaseApk)
+}

@@ -3,6 +3,7 @@ package com.enerjisa.entakepicturetest.di;
 import android.app.Application;
 
 import com.enerjisa.enframework.di.ENBaseModule;
+import com.enerjisa.entakepicture.ENTakePictureDaggerModule;
 import com.enerjisa.entakepicturetest.TestApplication;
 import com.enerjisa.entakepicturetest.di.binders.ActivityBinder;
 
@@ -21,6 +22,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AppModule.class,
         ENBaseModule.class,
         ActivityBinder.class,
+        ENTakePictureDaggerModule.class
 })
 public interface AppComponent {
 

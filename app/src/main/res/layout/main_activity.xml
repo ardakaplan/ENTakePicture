@@ -9,8 +9,8 @@
     tools:ignore="HardcodedText">
 
     <Button
-        android:id="@+id/mainActicity_button_fileTest"
+        android:id="@+id/mainActicity_button_takePhoto"
         style="@style/general_button"
-        android:text="TAKE PİCTURE" />
+        android:text="TAKE PHOTO" />
 
 </LinearLayout>

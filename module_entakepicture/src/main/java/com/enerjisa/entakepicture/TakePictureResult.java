@@ -10,5 +10,6 @@ public enum TakePictureResult {
     SUCCESS,
     ERROR,
     NO_CAMERA,
-    USER_CANCELED
+    USER_CANCELED,
+    NO_PERMISSION
 }
