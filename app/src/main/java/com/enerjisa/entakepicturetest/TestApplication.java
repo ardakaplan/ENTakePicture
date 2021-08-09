@@ -1,5 +1,7 @@
 package com.enerjisa.entakepicturetest;
 
+import android.util.Log;
+
 import com.ardakaplan.rdalogger.RDALogFullData;
 import com.enerjisa.enframework.ENApplication;
 import com.enerjisa.entakepicturetest.di.AppComponent;

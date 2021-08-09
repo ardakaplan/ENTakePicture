@@ -25,7 +25,6 @@ import butterknife.OnClick;
  */
 public class MainActivity extends BaseActivity {
 
-
     @OnClick(R.id.mainActicity_button_takePhoto)
     void clickedTakePhoto() {
 
@@ -37,7 +36,7 @@ public class MainActivity extends BaseActivity {
 
                 if (!mediaStorageDir.mkdirs()) {
 
-                    RDALogger.error("failed to create directory Enerjisa");
+                    RDALogger.error("failed to create directory test_en_take_picture_folder");
                 }
             }
 

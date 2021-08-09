@@ -23,7 +23,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 
-import com.ardakaplan.rdalogger.RDALogger;
+import com.ardakaplan.rdalogger.RDALoggerNonListened;
 import com.enerjisa.enframework.helpers.ENBitmapHelpers;
 import com.enerjisa.enframework.helpers.ENResourceHelpers;
 import com.enerjisa.enframework.ui.screens.ENActivity;
@@ -213,7 +213,10 @@ public final class ENTakePictureActivity extends ENActivity {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        RDALogger.info("TAKEN PHOTO\nQuality : " + photoQuality + "\nWidth : " + bitmap.getWidth() + "\nHeight : " + bitmap.getHeight());
+        RDALoggerNonListened.info("\nTaken photo features" +
+                "\nquality : " + photoQuality +
+                "\nwidth : " + bitmap.getWidth() +
+                "\nheight : " + bitmap.getHeight());
 
         bitmap.compress(Bitmap.CompressFormat.JPEG, photoQuality, byteArrayOutputStream);
 

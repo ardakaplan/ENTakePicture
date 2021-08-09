@@ -2,6 +2,7 @@ package com.enerjisa.entakepicture.managers;
 
 import android.app.Activity;
 
+import com.ardakaplan.rdalogger.RDALoggerNonListened;
 import com.enerjisa.entakepicture.data.TakePictureListener;
 import com.enerjisa.entakepicture.ui.ENTakePictureActivity;
 
@@ -10,6 +11,7 @@ import com.enerjisa.entakepicture.ui.ENTakePictureActivity;
  * <p>
  * ardakaplan101@gmail.com
  */
+@SuppressWarnings("unused")
 public final class TakePictureManager {
 
     //varsayılan fotoğraf kalitesi
@@ -20,6 +22,9 @@ public final class TakePictureManager {
 
     //default value
     private int quality = DEFAULT_PHOTO_QUALITY;
+
+    //crop ekranı açılacak mı
+    private boolean openCropScreen = false;
 
     //çekim sonucu için listener
     private TakePictureListener takePictureListener;
@@ -43,6 +48,10 @@ public final class TakePictureManager {
         return this;
     }
 
+    /**
+     * @param description adding description for recognising result value
+     * @return {@link TakePictureManager}
+     */
     public TakePictureManager addDescription(String description) {
 
         this.description = description;
@@ -50,6 +59,23 @@ public final class TakePictureManager {
         return this;
     }
 
+    /**
+     * TODO henüz yapılmadı
+     *
+     * @param openCropScreen crop ekranı açılacak mı, varsayılan değer false
+     * @return {@link TakePictureManager}
+     */
+    public TakePictureManager penCropScreen(boolean openCropScreen) {
+
+        this.openCropScreen = openCropScreen;
+
+        return this;
+    }
+
+    /**
+     * @param takePictureListener fotoğraf sonucu öğrenmek istiyorsan bu listener ı set etmen gerekiyor
+     * @return {@link TakePictureManager}
+     */
     public TakePictureManager addListener(TakePictureListener takePictureListener) {
 
         this.takePictureListener = takePictureListener;
@@ -57,6 +83,13 @@ public final class TakePictureManager {
         return this;
     }
 
+    /**
+     * ayarlamalar bittikten sonra bu metodun çağrılması gerekiyor.
+     * <p>
+     * {@link Setup#takePicture(Activity)} metodu bu obje üzerinden çağrılır
+     *
+     * @return {@link Setup}
+     */
     public Setup setUp() {
 
         return new Setup();
@@ -64,11 +97,23 @@ public final class TakePictureManager {
 
     public class Setup {
 
+        /**
+         * dışarıya kapalı constructor
+         */
         private Setup() {
 
         }
 
+        /**
+         * @param activity nihai olarak resim çekmeyi başlatacak olan metot
+         *                 daha önce ayarlanan değerlere göre resim çekme ekranını {@link ENTakePictureActivity} başlatır
+         */
         public void takePicture(Activity activity) {
+
+            RDALoggerNonListened.info("\nCamera starts with ->" +
+                    "\nphotoFilePath  : " + photoFilePath +
+                    "\nquality        : " + quality +
+                    "\ndescription    : " + description);
 
             ENTakePictureActivity.open(activity, photoFilePath, quality, description, takePictureListener);
         }
