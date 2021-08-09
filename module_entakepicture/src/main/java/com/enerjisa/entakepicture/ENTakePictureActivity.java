@@ -1,7 +1,6 @@
 package com.enerjisa.entakepicture;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +11,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
@@ -42,20 +42,36 @@ public class ENTakePictureActivity extends ENActivity {
     public static final String RESULT = "RESULT";
 
     private final int PERMISSION_REQUEST_CODE = 1;
-    private final int INTENT_REQUEST_CODE_TAKE_PICTURE = 1;
+    private static final int INTENT_REQUEST_CODE_TAKE_PICTURE = 1;
 
+    //*****************************************************//
+    //**************STATIC OLARAK SET EDILENLER************//
+    //*****************************************************//
+    //geri dönüş için listener
+    public static TakePictureListener takePictureListener;
+
+    //*****************************************************//
+    //**************INTENT TEN GELEN DEĞERLER**************//
+    //*****************************************************//
     //resmin kaydedileceği dosya
     private File photoFile;
 
-    private LocationManager locationManager;
+    //fotoğraf kalitesi
+    private int photoQuality;
+
+    //*****************************************************//
+    //**************KONUM ICIN GEREKLI NESNELER************//
+    //*****************************************************//
 
     //resme ait koordinatlar
     private double photoLatitude = 0L;
     private double photoLongitude = 0L;
 
-    private int photoQuality = 30;
+    //konum için locationManager
+    private LocationManager locationManager;
 
-    private LocationListener locationListener = new LocationListener() {
+    //konum etiketi için gerekli obje
+    private final LocationListener locationListener = new LocationListener() {
 
         @Override
         public void onLocationChanged(@NonNull Location location) {
@@ -73,7 +89,7 @@ public class ENTakePictureActivity extends ENActivity {
 
         photoFile = new File(getIntent().getExtras().getString(FILE_PATH));
 
-        photoQuality = getIntent().getExtras().getInt(PHOTO_QUALITY, 30);
+        photoQuality = getIntent().getExtras().getInt(PHOTO_QUALITY, DEFAULT_PHOTO_QUALITY);
 
         //checking camera
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -319,7 +335,6 @@ public class ENTakePictureActivity extends ENActivity {
 
             bitmapFactoryOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
-
             Bitmap bitmap = BitmapFactory.decodeFile(Uri.fromFile(photoFile).getPath(), bitmapFactoryOptions);
 
             String path = saveImage(bitmap);
@@ -328,21 +343,31 @@ public class ENTakePictureActivity extends ENActivity {
 
                 RDALogger.info("SAVED PHOTO PATH : " + path);
 
-                finishActivityForResult(TakePictureResult.SUCCESS);
+                takePictureListener.onResult(TakePictureResult.SUCCESS);
+
+//                finishActivityForResult(TakePictureResult.SUCCESS);
 
             } else {
 
-                finishActivityForResult(TakePictureResult.ERROR);
+                takePictureListener.onResult(TakePictureResult.ERROR);
+
+//                finishActivityForResult(TakePictureResult.ERROR);
             }
 
         } else if (requestCode == INTENT_REQUEST_CODE_TAKE_PICTURE && resultCode == RESULT_CANCELED) {
 
-            finishActivityForResult(TakePictureResult.USER_CANCELED);
+            takePictureListener.onResult(TakePictureResult.USER_CANCELED);
+
+//            finishActivityForResult(TakePictureResult.USER_CANCELED);
 
         } else {
 
-            finishActivityForResult(TakePictureResult.ERROR);
+            takePictureListener.onResult(TakePictureResult.ERROR);
+
+//            finishActivityForResult(TakePictureResult.ERROR);
         }
+
+        finish();
     }
 
     private void finishActivityForResult(TakePictureResult takePictureResult) {
@@ -407,5 +432,17 @@ public class ENTakePictureActivity extends ENActivity {
 
             activity.startActivityForResult(intent, requestCode);
         }
+    }
+
+    public static void open(Activity activity, String filePath, @Nullable Integer photoQuality, TakePictureListener takePictureListener) {
+
+        Intent intent = new Intent(activity, ENTakePictureActivity.class);
+
+        ENTakePictureActivity.takePictureListener = takePictureListener;
+
+        intent.putExtra(FILE_PATH, filePath);
+        intent.putExtra(PHOTO_QUALITY, photoQuality);
+
+        activity.startActivityForResult(intent, INTENT_REQUEST_CODE_TAKE_PICTURE);
     }
 }

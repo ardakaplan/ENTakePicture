@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.os.Parcel;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -12,6 +13,8 @@ import androidx.core.content.ContextCompat;
 import com.ardakaplan.rdalogger.RDALogger;
 import com.enerjisa.enframework.helpers.ENIntentHelpers;
 import com.enerjisa.entakepicture.ENTakePictureActivity;
+import com.enerjisa.entakepicture.TakePictureListener;
+import com.enerjisa.entakepicture.TakePictureManager;
 import com.enerjisa.entakepicture.TakePictureResult;
 import com.enerjisa.entakepicturetest.R;
 import com.enerjisa.entakepicturetest.ui.base.BaseActivity;
@@ -52,7 +55,17 @@ public class MainActivity extends BaseActivity {
 
             String photoFilePath = mediaStorageDir.getPath() + File.separator + "TEST_PHOTO_" + System.currentTimeMillis() + ".jpg";
 
-            ENTakePictureActivity.open(this, photoFilePath, 50, REQUEST_CODE_OPEN_TAKE_PHOTO_ACTIVITY);
+            new TakePictureManager(photoFilePath).setPhotoQuality(50).addListener(new TakePictureListener() {
+
+                @Override
+                public void onResult(TakePictureResult takePictureResult) {
+
+                    RDALogger.info("CAMERA RESULT " + takePictureResult);
+
+                }
+            }).setUp().takePicture(this);
+
+//            ENTakePictureActivity.open(this, photoFilePath, 50, REQUEST_CODE_OPEN_TAKE_PHOTO_ACTIVITY);
         }
     }
 
