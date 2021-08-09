@@ -14,6 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -129,14 +132,53 @@ public final class ENTakePictureActivity extends ENActivity {
     private void takePhoto() {
 
         final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, getPackageName(), photoFile));
+        }
 
-        Uri uri = FileProvider.getUriForFile(this, getPackageName(), photoFile);
+        registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
 
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            @Override
+            public void onActivityResult(ActivityResult activityResult) {
 
-        startActivityForResult(intent, INTENT_REQUEST_CODE_TAKE_PICTURE);
+                processOnActivityResult(activityResult);
+            }
+        }).launch(intent);
+    }
+
+    private void processOnActivityResult(ActivityResult activityResult) {
+
+        if (activityResult.getResultCode() == RESULT_OK) {
+
+            BitmapFactory.Options bitmapFactoryOptions = new BitmapFactory.Options();
+
+            bitmapFactoryOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(Uri.fromFile(photoFile).getPath(), bitmapFactoryOptions);
+
+            try {
+
+                takePictureListener.onResult(TakePictureResult.SUCCESS, description, saveImage(bitmap), null);
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+                takePictureListener.onResult(TakePictureResult.ERROR, description, photoFile.getPath(), e);
+            }
+
+        } else if (activityResult.getResultCode() == RESULT_CANCELED) {
+
+            takePictureListener.onResult(TakePictureResult.USER_CANCELED, description, photoFile.getPath(), null);
+
+        } else {
+
+            takePictureListener.onResult(TakePictureResult.ERROR, description, photoFile.getPath(), new RuntimeException("Something went worng"));
+        }
+
+        finish();
     }
 
 
@@ -184,10 +226,6 @@ public final class ENTakePictureActivity extends ENActivity {
             fileOutputStream = new FileOutputStream(photoFile);
 
             fileOutputStream.write(bitmapdata);
-
-        } catch (IOException e) {
-
-            throw e;
 
         } finally {
 
@@ -313,41 +351,6 @@ public final class ENTakePictureActivity extends ENActivity {
 
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == INTENT_REQUEST_CODE_TAKE_PICTURE && resultCode == RESULT_OK) {
-
-            BitmapFactory.Options bitmapFactoryOptions = new BitmapFactory.Options();
-
-            bitmapFactoryOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(Uri.fromFile(photoFile).getPath(), bitmapFactoryOptions);
-
-            try {
-
-                takePictureListener.onResult(TakePictureResult.SUCCESS, description, saveImage(bitmap), null);
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-                takePictureListener.onResult(TakePictureResult.ERROR, description, photoFile.getPath(), e);
-            }
-
-        } else if (requestCode == INTENT_REQUEST_CODE_TAKE_PICTURE && resultCode == RESULT_CANCELED) {
-
-            takePictureListener.onResult(TakePictureResult.USER_CANCELED, description, photoFile.getPath(), null);
-
-        } else {
-
-            takePictureListener.onResult(TakePictureResult.ERROR, description, photoFile.getPath(), new RuntimeException("Something went worng"));
-        }
-
-        finish();
     }
 
     @Override
