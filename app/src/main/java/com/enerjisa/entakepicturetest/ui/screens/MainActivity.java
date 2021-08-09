@@ -58,14 +58,11 @@ public class MainActivity extends BaseActivity {
             new TakePictureManager(photoFilePath).setPhotoQuality(50).addListener(new TakePictureListener() {
 
                 @Override
-                public void onResult(TakePictureResult takePictureResult) {
+                public void onResult(TakePictureResult takePictureResult, String description, String photoFilePath, Exception exception) {
 
                     RDALogger.info("CAMERA RESULT " + takePictureResult);
-
                 }
             }).setUp().takePicture(this);
-
-//            ENTakePictureActivity.open(this, photoFilePath, 50, REQUEST_CODE_OPEN_TAKE_PHOTO_ACTIVITY);
         }
     }
 

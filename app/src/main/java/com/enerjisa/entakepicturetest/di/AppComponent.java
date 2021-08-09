@@ -3,7 +3,7 @@ package com.enerjisa.entakepicturetest.di;
 import android.app.Application;
 
 import com.enerjisa.enframework.di.ENBaseModule;
-import com.enerjisa.entakepicture.ENTakePictureDaggerModule;
+import com.enerjisa.entakepicture.di.ENTakePictureDaggerModule;
 import com.enerjisa.entakepicturetest.TestApplication;
 import com.enerjisa.entakepicturetest.di.binders.ActivityBinder;
 

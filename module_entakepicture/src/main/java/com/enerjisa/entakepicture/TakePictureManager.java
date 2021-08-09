@@ -9,9 +9,18 @@ import android.app.Activity;
  */
 public final class TakePictureManager {
 
-    private String photoFilePath;//fotoğraf dosya yolu
-    private int quality = 30;//default value
-    private TakePictureListener takePictureListener;//çekim sonucu için listener
+    //fotoğraf dosya yolu
+    private final String photoFilePath;
+
+    //default value
+    private int quality = 30;
+
+    //çekim sonucu için listener
+    private TakePictureListener takePictureListener;
+
+    //bazı durumlarda hangi resmi çektiğimiz bilgisinide almamız gerekebiliyor, bu yüzden ekstra bir alan eklendi,
+    // eğer bu alan set edildiyse resim sonucundan aynen geri gönderilir
+    private String description;
 
     /**
      * @param photoFilePath fotoğraf dosyası için dosya yolu,
@@ -24,6 +33,13 @@ public final class TakePictureManager {
     public TakePictureManager setPhotoQuality(int quality) {
 
         this.quality = quality;
+
+        return this;
+    }
+
+    public TakePictureManager addDescription(String description) {
+
+        this.description = description;
 
         return this;
     }
@@ -48,7 +64,7 @@ public final class TakePictureManager {
 
         public void takePicture(Activity activity) {
 
-            ENTakePictureActivity.open(activity, photoFilePath, quality, takePictureListener);
+            ENTakePictureActivity.open(activity, photoFilePath, quality, description, takePictureListener);
         }
     }
 }

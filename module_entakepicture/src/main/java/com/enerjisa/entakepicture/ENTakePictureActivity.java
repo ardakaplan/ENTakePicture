@@ -11,12 +11,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
@@ -25,7 +23,6 @@ import com.ardakaplan.rdalogger.RDALogger;
 import com.enerjisa.enframework.helpers.ENBitmapHelpers;
 import com.enerjisa.enframework.helpers.ENResourceHelpers;
 import com.enerjisa.enframework.ui.screens.ENActivity;
-import com.enerjisa.enframework.ui.screens.ENFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,9 +36,9 @@ public class ENTakePictureActivity extends ENActivity {
 
     private static final String FILE_PATH = "FILE_PATH";
     private static final String PHOTO_QUALITY = "PHOTO_QUALITY";
+    private static final String DESCRIPTION = "DESCRIPTION";
     public static final String RESULT = "RESULT";
 
-    private final int PERMISSION_REQUEST_CODE = 1;
     private static final int INTENT_REQUEST_CODE_TAKE_PICTURE = 1;
 
     //*****************************************************//
@@ -58,6 +55,9 @@ public class ENTakePictureActivity extends ENActivity {
 
     //fotoğraf kalitesi
     private int photoQuality;
+
+    //aynen geri gönderilecek açıklama alanı
+    private String description;
 
     //*****************************************************//
     //**************KONUM ICIN GEREKLI NESNELER************//
@@ -91,8 +91,15 @@ public class ENTakePictureActivity extends ENActivity {
 
         photoQuality = getIntent().getExtras().getInt(PHOTO_QUALITY, DEFAULT_PHOTO_QUALITY);
 
+        description = getIntent().getExtras().getString(DESCRIPTION, null);
+
+        checkNeedsAndGoOn();
+    }
+
+    private void checkNeedsAndGoOn() {
+
         //checking camera
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
             //checking permission
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -101,12 +108,12 @@ public class ENTakePictureActivity extends ENActivity {
 
             } else {
 
-                finishActivityForResult(TakePictureResult.NO_PERMISSION);
+                takePictureListener.onResult(TakePictureResult.NO_PERMISSION, description, photoFile.getPath(), null);
             }
 
         } else {
 
-            finishActivityForResult(TakePictureResult.NO_CAMERA);
+            takePictureListener.onResult(TakePictureResult.NO_CAMERA, description, photoFile.getPath(), null);
         }
     }
 
@@ -124,7 +131,7 @@ public class ENTakePictureActivity extends ENActivity {
     }
 
 
-    private String saveImage(Bitmap bitmap) {
+    private String saveImage(Bitmap bitmap) throws IOException {
 
         if (bitmap == null) {
 
@@ -171,9 +178,7 @@ public class ENTakePictureActivity extends ENActivity {
 
         } catch (IOException e) {
 
-            e.printStackTrace();
-
-            return "";
+            throw e;
 
         } finally {
 
@@ -260,31 +265,6 @@ public class ENTakePictureActivity extends ENActivity {
         return sOut;
     }
 
-    private void requestPermission() {
-
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                takePhoto();
-
-            } else {
-
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-
-                    requestPermission();
-                }
-            }
-        }
-    }
-
     /**
      * locationManager ı başlatır, fotoğrafa konum bilgisini eklemek için gerekli.
      * <p>
@@ -337,49 +317,27 @@ public class ENTakePictureActivity extends ENActivity {
 
             Bitmap bitmap = BitmapFactory.decodeFile(Uri.fromFile(photoFile).getPath(), bitmapFactoryOptions);
 
-            String path = saveImage(bitmap);
+            try {
 
-            if (path != null && !path.equals("")) {
+                takePictureListener.onResult(TakePictureResult.SUCCESS, description, saveImage(bitmap), null);
 
-                RDALogger.info("SAVED PHOTO PATH : " + path);
+            } catch (IOException e) {
 
-                takePictureListener.onResult(TakePictureResult.SUCCESS);
+                e.printStackTrace();
 
-//                finishActivityForResult(TakePictureResult.SUCCESS);
-
-            } else {
-
-                takePictureListener.onResult(TakePictureResult.ERROR);
-
-//                finishActivityForResult(TakePictureResult.ERROR);
+                takePictureListener.onResult(TakePictureResult.ERROR, description, photoFile.getPath(), e);
             }
 
         } else if (requestCode == INTENT_REQUEST_CODE_TAKE_PICTURE && resultCode == RESULT_CANCELED) {
 
-            takePictureListener.onResult(TakePictureResult.USER_CANCELED);
-
-//            finishActivityForResult(TakePictureResult.USER_CANCELED);
+            takePictureListener.onResult(TakePictureResult.USER_CANCELED, description, photoFile.getPath(), null);
 
         } else {
 
-            takePictureListener.onResult(TakePictureResult.ERROR);
-
-//            finishActivityForResult(TakePictureResult.ERROR);
+            takePictureListener.onResult(TakePictureResult.ERROR, description, photoFile.getPath(), new RuntimeException("Something went worng"));
         }
 
         finish();
-    }
-
-    private void finishActivityForResult(TakePictureResult takePictureResult) {
-
-        Intent resultIntent = new Intent();
-        {
-            resultIntent.putExtra(RESULT, takePictureResult);
-
-            setResult(RESULT_OK, resultIntent);
-
-            finish();
-        }
     }
 
     @Override
@@ -399,49 +357,16 @@ public class ENTakePictureActivity extends ENActivity {
         return ENResourceHelpers.NO_LAYOUT;
     }
 
-    /**
-     * @param activity     activity
-     * @param filePath     resim dosya yolu
-     * @param photoQuality istenilen fotoğraf kalitesi, gönderilmez ise varsayılanı 30
-     * @param requestCode  requestCode
-     */
-    public static void open(Activity activity, String filePath, @Nullable Integer photoQuality, int requestCode) {
-
-        open(activity, null, filePath, photoQuality, requestCode);
-    }
-
-    /**
-     * @param activity     activity
-     * @param fragment     fragment
-     * @param filePath     resim dosya yolu
-     * @param photoQuality istenilen fotoğraf kalitesi, gönderilmez ise varsayılanı 30
-     * @param requestCode  requestCode
-     */
-    public static void open(Activity activity, @Nullable ENFragment fragment, String filePath, @Nullable Integer photoQuality, int requestCode) {
+    public static void open(Activity activity, String filePath, @Nullable Integer photoQuality, @Nullable String description, TakePictureListener takePictureListener) {
 
         Intent intent = new Intent(activity, ENTakePictureActivity.class);
 
-        intent.putExtra(FILE_PATH, filePath);
-        intent.putExtra(PHOTO_QUALITY, photoQuality);
-
-        if (fragment != null) {
-
-            fragment.startActivityForResult(intent, requestCode);
-
-        } else {
-
-            activity.startActivityForResult(intent, requestCode);
-        }
-    }
-
-    public static void open(Activity activity, String filePath, @Nullable Integer photoQuality, TakePictureListener takePictureListener) {
-
-        Intent intent = new Intent(activity, ENTakePictureActivity.class);
-
+        //interface static olarak set edilir
         ENTakePictureActivity.takePictureListener = takePictureListener;
 
         intent.putExtra(FILE_PATH, filePath);
         intent.putExtra(PHOTO_QUALITY, photoQuality);
+        intent.putExtra(DESCRIPTION, description);
 
         activity.startActivityForResult(intent, INTENT_REQUEST_CODE_TAKE_PICTURE);
     }
