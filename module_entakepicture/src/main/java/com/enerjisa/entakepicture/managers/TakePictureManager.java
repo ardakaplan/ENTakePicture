@@ -1,6 +1,9 @@
-package com.enerjisa.entakepicture;
+package com.enerjisa.entakepicture.managers;
 
 import android.app.Activity;
+
+import com.enerjisa.entakepicture.data.TakePictureListener;
+import com.enerjisa.entakepicture.ui.ENTakePictureActivity;
 
 /**
  * Created by Arda Kaplan at 9.08.2021 - 12:44
@@ -9,11 +12,14 @@ import android.app.Activity;
  */
 public final class TakePictureManager {
 
+    //varsayılan fotoğraf kalitesi
+    public static final int DEFAULT_PHOTO_QUALITY = 30;
+
     //fotoğraf dosya yolu
     private final String photoFilePath;
 
     //default value
-    private int quality = 30;
+    private int quality = DEFAULT_PHOTO_QUALITY;
 
     //çekim sonucu için listener
     private TakePictureListener takePictureListener;

@@ -1,4 +1,4 @@
-package com.enerjisa.entakepicture;
+package com.enerjisa.entakepicture.data;
 
 /**
  * Created by Arda Kaplan at 13.12.2020 - 00:16

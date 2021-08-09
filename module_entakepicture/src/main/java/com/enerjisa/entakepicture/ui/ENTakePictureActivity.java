@@ -1,6 +1,7 @@
-package com.enerjisa.entakepicture;
+package com.enerjisa.entakepicture.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,6 +24,9 @@ import com.ardakaplan.rdalogger.RDALogger;
 import com.enerjisa.enframework.helpers.ENBitmapHelpers;
 import com.enerjisa.enframework.helpers.ENResourceHelpers;
 import com.enerjisa.enframework.ui.screens.ENActivity;
+import com.enerjisa.entakepicture.data.TakePictureListener;
+import com.enerjisa.entakepicture.data.TakePictureResult;
+import com.enerjisa.entakepicture.managers.TakePictureManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,16 +34,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 
-public class ENTakePictureActivity extends ENActivity {
+public final class ENTakePictureActivity extends ENActivity {
 
-    public static final int DEFAULT_PHOTO_QUALITY = 30;
 
+    //*****************************************************//
+    //**************INTENT REQUEST CODE********************//
+    //*****************************************************//
+    private static final int INTENT_REQUEST_CODE_TAKE_PICTURE = 1;
+
+    //*****************************************************//
+    //**************INTENT FIELD KEYS**********************//
+    //*****************************************************//
     private static final String FILE_PATH = "FILE_PATH";
     private static final String PHOTO_QUALITY = "PHOTO_QUALITY";
     private static final String DESCRIPTION = "DESCRIPTION";
-    public static final String RESULT = "RESULT";
 
-    private static final int INTENT_REQUEST_CODE_TAKE_PICTURE = 1;
 
     //*****************************************************//
     //**************STATIC OLARAK SET EDILENLER************//
@@ -89,7 +98,7 @@ public class ENTakePictureActivity extends ENActivity {
 
         photoFile = new File(getIntent().getExtras().getString(FILE_PATH));
 
-        photoQuality = getIntent().getExtras().getInt(PHOTO_QUALITY, DEFAULT_PHOTO_QUALITY);
+        photoQuality = getIntent().getExtras().getInt(PHOTO_QUALITY, TakePictureManager.DEFAULT_PHOTO_QUALITY);
 
         description = getIntent().getExtras().getString(DESCRIPTION, null);
 
@@ -138,7 +147,7 @@ public class ENTakePictureActivity extends ENActivity {
             return null;
         }
 
-        if (photoQuality == DEFAULT_PHOTO_QUALITY) {
+        if (photoQuality == TakePictureManager.DEFAULT_PHOTO_QUALITY) {
 
             if (bitmap.getWidth() > 1200) {
 
@@ -270,6 +279,7 @@ public class ENTakePictureActivity extends ENActivity {
      * <p>
      * Eğer uygulama tarafından konum izni verilmediyse bu bilgiler eklenmez
      */
+    @SuppressLint("MissingPermission")
     private void requestLocationManager() {
 
         //konum izni verilmediyse locationManager başlatılmaz

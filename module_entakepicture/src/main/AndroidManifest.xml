@@ -5,7 +5,7 @@
     <application>
 
         <activity
-            android:name=".ENTakePictureActivity"
+            android:name=".ui.ENTakePictureActivity"
             android:screenOrientation="portrait" />
     </application>
 </manifest>

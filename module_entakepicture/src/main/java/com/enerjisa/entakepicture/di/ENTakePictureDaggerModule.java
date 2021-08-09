@@ -1,7 +1,7 @@
 package com.enerjisa.entakepicture.di;
 
 
-import com.enerjisa.entakepicture.ENTakePictureActivity;
+import com.enerjisa.entakepicture.ui.ENTakePictureActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

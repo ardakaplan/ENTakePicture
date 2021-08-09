@@ -1,21 +1,16 @@
 package com.enerjisa.entakepicturetest.ui.screens;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.os.Parcel;
 
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.ardakaplan.rdalogger.RDALogger;
 import com.enerjisa.enframework.helpers.ENIntentHelpers;
-import com.enerjisa.entakepicture.ENTakePictureActivity;
-import com.enerjisa.entakepicture.TakePictureListener;
-import com.enerjisa.entakepicture.TakePictureManager;
-import com.enerjisa.entakepicture.TakePictureResult;
+import com.enerjisa.entakepicture.data.TakePictureListener;
+import com.enerjisa.entakepicture.data.TakePictureResult;
+import com.enerjisa.entakepicture.managers.TakePictureManager;
 import com.enerjisa.entakepicturetest.R;
 import com.enerjisa.entakepicturetest.ui.base.BaseActivity;
 
@@ -30,13 +25,6 @@ import butterknife.OnClick;
  */
 public class MainActivity extends BaseActivity {
 
-    //REQUEST CODES
-    private final int REQUEST_CODE_OPEN_TAKE_PHOTO_ACTIVITY = 1596;
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.main_activity;
-    }
 
     @OnClick(R.id.mainActicity_button_takePhoto)
     void clickedTakePhoto() {
@@ -66,6 +54,9 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    /**
+     * @return izinleri kontrol eder, izin sayfasını açar
+     */
     private boolean checkPermissions() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
@@ -83,35 +74,8 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE_OPEN_TAKE_PHOTO_ACTIVITY && resultCode == Activity.RESULT_OK) {
-
-            TakePictureResult takePictureResult = (TakePictureResult) data.getExtras().getSerializable(ENTakePictureActivity.RESULT);
-
-            RDALogger.info("CAMERA RESULT " + takePictureResult);
-
-            //dönen cevaplar bu şekilde elde edilebilir
-            switch (takePictureResult) {
-
-                case SUCCESS:
-
-                    break;
-
-                case ERROR:
-
-                    break;
-
-                case NO_CAMERA:
-
-                    break;
-
-                case USER_CANCELED:
-
-                    break;
-            }
-        }
+    @Override
+    public int getLayoutId() {
+        return R.layout.main_activity;
     }
 }
