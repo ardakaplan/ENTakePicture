@@ -16,7 +16,7 @@ android {
         versionCode 1
         versionName "0.0.0.1"
 
-        setProperty("archivesBaseName", getApkName("EN_FRAMEWORK", versionName))
+        setProperty("archivesBaseName", getApkName(enFrameWorkLibraryName, versionName))
 
         buildConfigField "String", 'GIT_BRANCH_NAME', '\"' + branchName + '\"'
     }
@@ -40,6 +40,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
@@ -51,16 +56,12 @@ dependencies {
     //******************EN**********************************
     //******************************************************
 
-    //EN FRAMEWORK
-    if (using_en_framework_local_aar) {
-
-        println(ANSI_WHITE + "EN_FRAMEWORK usage : " + ANSI_GREEN + "LOCAL" + ANSI_RESET)
+    //FRAMEWORK
+    if (writeLibraryUsageStatus(using_en_framework_local_aar, enFrameWorkLibraryName, "$en_framework_version")) {
 
         implementation files(aarDir + '/' + EN_FRAMEWORK_AAR_NAME)
 
     } else {
-
-        println(ANSI_WHITE + "EN_FRAMEWORK usage : " + ANSI_GREEN + "CLOUD - version : $en_framework_version" + ANSI_RESET)
 
         implementation "com.github.ardakaplan:ENFramework:$en_framework_version"
     }

@@ -4,7 +4,15 @@ task copyReleaseApk(type: Copy) {
 
     localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
 
+    println("")
+    println("################################################################")
+    println("#####      AAR DEPLOYMENT      #################################")
+    println("################################################################")
+
+
     if (localProperties.containsKey('aar_dir')) {
+
+        printGreen("aar_dir field in local.properties is DEFINED and if you rebuild project, local aar file will be created into desired folder.")
 
         from 'build/outputs/aar', 'build/libs'
 
@@ -14,7 +22,7 @@ task copyReleaseApk(type: Copy) {
 
     } else {
 
-        println "aar_dir is not set"
+        printRed("aar_dir field in local.properties IS NOT DEFINED")
     }
 }
 

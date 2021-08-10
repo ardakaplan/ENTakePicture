@@ -7,6 +7,27 @@
 ext {
 
     /**
+     * kütüphane kullanım durumunu build loguna yazar, 'usingFromLocal' değerini geri döner
+     *
+     * usingFromLocal - boolean -> scripten gelen kütüphane kullanım değişkeni
+     * libraryName - String -> kütüphane ismi
+     * libraryInCloudVersion - String -> cloud dan kullanılan kütüphane sürümü
+     */
+    writeLibraryUsageStatus = { usingFromLocal, libraryName, libraryInCloudVersion ->
+
+        if (usingFromLocal) {
+
+            println(ANSI_WHITE + libraryName + " usage : " + ANSI_GREEN + "LOCAL" + ANSI_RESET)
+
+        } else {
+
+            println(ANSI_WHITE + libraryName + " usage : " + ANSI_GREEN + "CLOUD - version : " + ANSI_BLUE + libraryInCloudVersion + ANSI_RESET)
+        }
+
+        return usingFromLocal
+    }
+
+    /**
      * verilen parametreler göre uygulama ismini döner
      */
     getApkName = { applicationName, applicationVersion ->

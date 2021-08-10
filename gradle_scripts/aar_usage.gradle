@@ -2,9 +2,13 @@ apply from: 'gradle_scripts/common_methods.gradle'
 
 ext {
 
+    //kütüphanelere ait isim tanımlamaları
+    enFrameWorkLibraryName = "EN_FRAMEWORK"
+    enTakePictureLibrayName = "EN_TAKE_PICTURE"
+
     Properties localProperties = getLocalPropertiesFile()
 
-    //default values must be -> false
+    //kütüphanalere ait lokal kullanım değişkenleri
     use_en_framework_from_local = false
 
     if (localProperties.containsKey('use_en_framework_from_local')) {
@@ -40,7 +44,7 @@ ext {
     //****************************************************************************/
 
     //EN_FRAMEWORK AAR NAME
-    EN_FRAMEWORK_AAR_NAME = "/EN_FRAMEWORK-debug.aar"
+    EN_FRAMEWORK_AAR_NAME = "/" + enFrameWorkLibraryName + "-debug.aar"
 
     //****************************************************************************/
     //****AAR EXISTANCE***********************************************************/
