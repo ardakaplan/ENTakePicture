@@ -2,6 +2,7 @@ ext {
 
     ext.en_framework_version = '964e57fe76'
 
+    ext.core_ktx_version='1.6.0'
 
 
     ext.dagger_version = '2.28.3'

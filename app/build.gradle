@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply from: '../gradle_scripts/apk_file_path.gradle'
 
 android {
@@ -90,6 +91,9 @@ dependencies {
 
     //APPCOMBAT
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+
+    //KOTLIN
+    implementation "androidx.core:core-ktx:$core_ktx_version"
 
     //******************************************************
     //******************RDA*********************************

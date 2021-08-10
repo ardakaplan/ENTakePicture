@@ -6,8 +6,6 @@ task copyReleaseApk(type: Copy) {
 
     if (localProperties.containsKey('aar_dir')) {
 
-        println "aar_dir is filled -> " + localProperties.getProperty('aar_dir')
-
         from 'build/outputs/aar', 'build/libs'
 
         into localProperties.getProperty('aar_dir')
